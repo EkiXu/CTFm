@@ -19,33 +19,11 @@ live demo: [ctfm.ieki.xyz](https://ctfm.ieki.xyz)
 ## How to build
 
 ```
-#Frontend
+# Frontend Generate
 cd frontend
 yarn install
-yarn serve
+yarn build
 
-#Backend
-cd backend
-go mod tidy
-go run main.go
+# Run Sever 
+docker-compose up -d --build
 ```
-
-## TodoList
-
-### Frontend
-
-- [x] Register/Login
-- [X] ChangePassword
-- [x] User Profile
-- [x] Scoreborad
-- [ ] Admin Panel
-- [ ] Challenges Manage
-
-### Backend
-
-- [x] Register/Login
-- [ ] ChangePassword
-- [ ] User Profile
-- [ ] Scoreborad
-- [ ] Admin Panel
-- [ ] Challenges Manage

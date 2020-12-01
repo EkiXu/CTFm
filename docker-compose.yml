@@ -1,0 +1,46 @@
+version: "3.8"
+   
+services:
+  db:
+    image: mariadb
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: tNQbjEC23aKjmzjeweGYXkAN
+      MYSQL_DATABASE: ctfm
+      MYSQL_USER: ctfm
+      MYSQL_PASSWORD: ktbrKatGNxGY45bFPRfTWsjG
+  ctfm:
+    build: .
+    image: ctfm
+    volumes:
+      - ./backend:/backend
+    restart: always
+    expose:
+      - "8086"
+    depends_on:
+      - migration
+      - db
+  migration:
+    image: ctfm
+    command: python manage.py migrate --noinput
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+  nginx:
+    image: nginx
+    ports:
+      - "8090:80"
+    expose:
+      - "80"
+    volumes:
+      - ./nginx/http.conf:/etc/nginx/nginx.conf
+      - ./frontend/dist:/var/www/html
+      - ./nginx/ssl:/etc/ssl
+    links:
+      - ctfm
+    depends_on:
+      - ctfm
+    restart: always

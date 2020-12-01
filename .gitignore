@@ -1,6 +1,10 @@
 .DS_Store
 /dist
 dist.tar.gz
+db_data
+*.key
+*.cer
+
 
 # Editor directories and files
 .idea
