@@ -7,10 +7,10 @@ services:
       - ./db_data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: tNQbjEC23aKjmzjeweGYXkAN
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: ctfm
       MYSQL_USER: ctfm
-      MYSQL_PASSWORD: ktbrKatGNxGY45bFPRfTWsjG
+      MYSQL_PASSWORD: 
   ctfm:
     build: .
     image: ctfm
@@ -19,6 +19,8 @@ services:
     restart: always
     expose:
       - "8086"
+    environment: 
+      - SECRET_KEY=
     depends_on:
       - migration
       - db
@@ -38,7 +40,6 @@ services:
     volumes:
       - ./nginx/http.conf:/etc/nginx/nginx.conf
       - ./frontend/dist:/var/www/html
-      - ./nginx/ssl:/etc/ssl
     links:
       - ctfm
     depends_on:

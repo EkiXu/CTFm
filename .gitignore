@@ -4,6 +4,7 @@ dist.tar.gz
 db_data
 *.key
 *.cer
+docker-compose.yml
 
 
 # Editor directories and files
@@ -15,3 +16,4 @@ db_data
 *.sln
 *.sw?
 *.log
+
