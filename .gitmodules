@@ -4,3 +4,6 @@
 [submodule "frontend"]
 	path = frontend
 	url = https://github.com/EkiXu/CTFm_Frontend
+[submodule "dashboard"]
+	path = dashboard
+	url = https://github.com/EkiXu/CTFm_Dashboard
