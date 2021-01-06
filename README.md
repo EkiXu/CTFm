@@ -16,7 +16,12 @@ Frontend:![](https://img.shields.io/github/last-commit/EkiXu/CTFm_Frontend)
 ## How to build
 
 ```
-# Frontend Generate
+# Frontend Generate (optional)
+cd frontend
+yarn install
+yarn build
+
+# Dashboard Generate (optional)
 cd frontend
 yarn install
 yarn build
@@ -27,4 +32,7 @@ cp script/db.cnf.template  script/db.cnf # And Modify it yourself
 cp script/uwsgi.ini.template  script/uwsgi.ini # And Modify it yourself
 
 docker-compose up -d --build
+
+# Create Superuser
+
 ```
