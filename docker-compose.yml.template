@@ -41,8 +41,8 @@ services:
       - "80"
     volumes:
       - ./nginx/http.conf:/etc/nginx/nginx.conf
-      - ./frontend/dist:/var/www/html
-      - ./dashboard/dist:/var/www/html/admin
+      - ./frontend/dist:/var/www/frontend
+      - ./dashboard/dist:/var/www/dashboard
     links:
       - ctfm
     depends_on:
