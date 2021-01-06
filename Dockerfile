@@ -13,5 +13,3 @@ COPY backend /backend/
 EXPOSE 8086
 
 CMD ["uwsgi","--ini","script/uwsgi.ini"]
-
-#CMD ["uwsgi", "--ini", "script/uwsgi.ini"]

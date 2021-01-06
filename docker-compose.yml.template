@@ -7,12 +7,21 @@ services:
       - ./db_data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: modifyityourself
       MYSQL_DATABASE: ctfm
       MYSQL_USER: ctfm
-      MYSQL_PASSWORD: 
-  ctfm:
+      MYSQL_PASSWORD: modifyityourself
+  migration:
     build: .
+    image: ctfm
+    command: python manage.py migrate --noinput
+    volumes:
+      - ./backend:/backend
+    environment: 
+      - SECRET_KEY=""
+    depends_on:
+      - db
+  ctfm:
     image: ctfm
     volumes:
       - ./backend:/backend
@@ -20,16 +29,9 @@ services:
     expose:
       - "8086"
     environment: 
-      - SECRET_KEY=
+      - SECRET_KEY="" # be same as migration
     depends_on:
       - migration
-      - db
-  migration:
-    image: ctfm
-    command: python manage.py migrate --noinput
-    volumes:
-      - ./backend:/backend
-    depends_on:
       - db
   nginx:
     image: nginx
@@ -40,6 +42,7 @@ services:
     volumes:
       - ./nginx/http.conf:/etc/nginx/nginx.conf
       - ./frontend/dist:/var/www/html
+      - ./dashboard/dist:/var/www/html/admin
     links:
       - ctfm
     depends_on:
