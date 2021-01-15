@@ -7,10 +7,17 @@ services:
       - ./db_data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: modifyityourself
+      MYSQL_ROOT_PASSWORD: mysqlrootpasswd #modifyityourself
       MYSQL_DATABASE: ctfm
       MYSQL_USER: ctfm
-      MYSQL_PASSWORD: modifyityourself
+      MYSQL_PASSWORD: mysqlpasswd #modifyityourself
+  redis:
+    image: redis
+    command: redis-server --requirepass redispassword #modifyityourself
+    expose:
+        - 6379
+    ports:
+        - "6399:6379"
   migration:
     build: .
     image: ctfm
@@ -21,6 +28,7 @@ services:
       - SECRET_KEY=""
     depends_on:
       - db
+      - redis 
   ctfm:
     image: ctfm
     volumes:
@@ -33,6 +41,7 @@ services:
     depends_on:
       - migration
       - db
+      - redis
   nginx:
     image: nginx
     ports:

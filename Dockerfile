@@ -6,7 +6,8 @@ RUN pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simpl
     && pip install --upgrade pip \
     && pip install -r requirements.txt \
     && pip install mysqlclient \
-    && pip install uwsgi 
+    && pip install uwsgi  \
+    && pip install https://github.com/chibisov/drf-extensions/archive/master.zip
 
 COPY backend /backend/
 

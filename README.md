@@ -27,12 +27,10 @@ yarn install
 yarn build
 
 # Run Sever
-cp docker-compose.yml.template docker-compose.yml # And modify it yourself
-cp script/db.cnf.template  script/db.cnf # And Modify it yourself
-cp script/uwsgi.ini.template  script/uwsgi.ini # And Modify it yourself
-
+cp CTFm_backend/settings.py.template  CTFm_backend/settings.py # And Modify it yourself
 docker-compose up -d --build
 
 # Create Superuser
-
+# attach the ctfm_ctfm container and run 
+python manager.py createsuperuser
 ```
