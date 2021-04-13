@@ -19,6 +19,9 @@ A CTF Competition Platform
 ## How to build
 
 ```
+#pull submodule
+git submodule update --init --recursive
+
 # Frontend Generate (optional)
 cd frontend
 yarn install
