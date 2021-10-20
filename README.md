@@ -36,6 +36,7 @@ yarn build
 cd backend
 cp script/uwsgi.ini.template script/uwsgi.ini
 cp CTFm_backend/settings.py.template  CTFm_backend/settings.py # And Modify it yourself
+cp docker-compose.yaml.template docker-compose.yaml # And Modify Password yourself
 docker-compose up -d --build
 
 # Create Superuser
