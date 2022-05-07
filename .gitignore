@@ -4,7 +4,6 @@ dist.tar.gz
 db_data
 *.key
 *.cer
-docker-compose.yml
 
 
 # Editor directories and files
@@ -17,3 +16,8 @@ docker-compose.yml
 *.sw?
 *.log
 
+*.cer
+*.pem
+
+secrets/*
+!secrets/.gitkeep

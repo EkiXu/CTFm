@@ -1,0 +1,150 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    secrets:
+      - ctfm_db_password
+    environment:
+      - POSTGRES_DB=ctfm
+      - POSTGRES_USER=ctfm
+      - POSTGRES_PASSWORD_FILE=/run/secrets/ctfm_db_password
+    expose:
+      - 5432
+    ports:
+      - "28432:5432"
+    networks:
+      internal:
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    restart: always
+  redis:
+    image: redis
+    secrets:
+      - ctfm_redis_password
+    environment:
+      - REDIS_PASSWORD_FILE=/run/secrets/ctfm_redis_password
+    #command: redis-server --requirepass IpqWSBVEpgQlcTO2qCXXcwF3noGGh5BspKuLZ2XAF5aFTLZs
+    command: [
+      "bash", "-c",
+      '
+       docker-entrypoint.sh
+       --requirepass "$$(cat $$REDIS_PASSWORD_FILE)"
+      '
+    ]
+    expose:
+      - 6379
+    restart: always
+    networks:
+      internal:
+  ctfm:
+    image: ctfm
+    build: 
+      context: "./backend"
+    user: root
+    secrets:
+      - ctfm_redis_password
+      - ctfm_db_password
+      - ctfm_secret_key
+    volumes:
+      - ./backend:/backend
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    expose:
+      - "8086"
+      - "8087"
+    environment:
+      - SECRET_KEY_FILE=/run/secrets/ctfm_secret_key
+      - DB_PASSWORD_FILE=/run/secrets/ctfm_db_password
+      - DB_USER=ctfm
+      - REDIS_PASSWORD_FILE=/run/secrets/ctfm_redis_password
+    depends_on:
+      - db
+      - redis
+    networks:
+      internal:
+      frp:
+        ipv4_address: 172.1.0.2
+  frpc:
+    image: ctfm/frp
+    build:
+      context: "./backend/frp"
+    restart: always
+    volumes:
+      - ./backend/script/frpc.ini:/conf/frpc.ini
+    depends_on:
+      - frps
+    entrypoint:
+      - /usr/local/bin/frpc
+      - -c
+      - /conf/frpc.ini
+    tty:
+      true
+    networks:
+      frp:
+        ipv4_address: 172.1.0.3
+      frp_containers:
+
+  frps:
+    image: ctfm/frp
+    build:
+      context: "./backend/frp"
+    restart: always
+    volumes:
+      - ./backend/script/frps.ini:/conf/frps.ini
+    entrypoint:
+      - /usr/local/bin/frps
+      - -c
+      - /conf/frps.ini
+    network_mode: host
+  nginx:
+    build:
+      context: "./nginx"
+    ports:
+      - "80:80"
+      - "443:443"
+    expose:
+      - "80"
+      - "443"
+    volumes:
+      - ./frontend/dist:/var/www/frontend
+      - ./dashboard/dist:/var/www/frontend/admin
+      - ./nginx/files:/etc/nginx
+    links:
+      - ctfm
+    networks:
+      default:
+      internal:
+      static_container:
+    depends_on:
+      - ctfm
+    restart: always
+
+networks:
+  default:
+  internal:
+    internal: true
+  frp:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.1.0.0/24
+  frp_containers:
+    driver: overlay
+    internal: true
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.2.0.0/16
+  static_container:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.56.0.0/16
+
+secrets:
+  ctfm_db_password:
+    file: "./secrets/DB_PASSWORD"
+  ctfm_redis_password:
+    file: "./secrets/REDIS_PASSWORD"
+  ctfm_secret_key:
+    file: "./secrets/SECRET_KEY"
