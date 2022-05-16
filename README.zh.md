@@ -36,51 +36,59 @@ docker swarm init
 ```
 
 标记节点
+
 ```
 docker node ls #检查节点 ID
 docker node update --label-add name=linux-1 <节点 ID>
 ```
 
-创建相关secret
-
-```
-echo "<your secret here>" > "./secrets/DB_PASSWORD"
-echo "<your secret here>" > "./secrets/REDIS_PASSWORD"
-echo "<your secret here>" > "./secrets/SECRET_KEY"
-```
-
 拉取代码
+
 ```
 git clone https://github.com/EkiXu/CTFm
 cd CTFm
 #拉取子模块
 git submodule update --init --recursive
+#创建log文件夹
+mkdir backend/log/
+```
+
+创建相关secret
+
+```
+echo -n "<your secret here>" > "./secrets/DB_PASSWORD"
+echo -n "<your secret here>" > "./secrets/REDIS_PASSWORD"
+echo -n "<your secret here>" > "./secrets/SECRET_KEY"
 ```
 
 前端代码生成(可选)
+
 ```
 cd frontend
 yarn install
 yarn build
 ```
+
 中台代码生成(可选)
 
 ```
-cd frontend
+cd dashboard
 yarn install
 yarn build
 ```
 
 使用docker-compose编排启动
+
 ```
 docker-compose up -d --build
 ```
 
 数据库和管理员账号初始化
+
 ```
 docker-compose exec ctfm /bin/bash 
-python manager.py migrate
-python manager.py createsuperuser
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
 ## 一些设置
