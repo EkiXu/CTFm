@@ -34,21 +34,22 @@ docker node ls
 docker node update --label-add name=linux-1 <节点 ID>
 ```
 
-3. create secret for passwords
-
-```
-echo "<your secret here>" > "./secrets/DB_PASSWORD"
-echo "<your secret here>" > "./secrets/REDIS_PASSWORD"
-echo "<your secret here>" > "./secrets/SECRET_KEY"
-```
-
-4. pull the codes
+3. pull the codes
 
 ```
 git clone https://github.com/EkiXu/CTFm
 cd CTFm
 
 git submodule update --init --recursive
+mkdir backend/log/
+```
+
+4. create secret for passwords
+
+```
+echo -n "<your secret here>" > "./secrets/DB_PASSWORD"
+echo -n "<your secret here>" > "./secrets/REDIS_PASSWORD"
+echo -n "<your secret here>" > "./secrets/SECRET_KEY"
 ```
 
 5. regenerate frontend code
@@ -61,7 +62,7 @@ yarn build
 6. regenerate dashboard code
 
 ```
-cd frontend
+cd dashboard
 yarn install
 yarn build
 ```
@@ -76,8 +77,8 @@ docker-compose up -d --build
 
 ```
 docker-compose exec ctfm /bin/bash 
-python manager.py migrate
-python manager.py createsuperuser
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
 ## Configuration
