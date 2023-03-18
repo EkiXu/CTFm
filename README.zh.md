@@ -61,6 +61,12 @@ echo -n "<your secret here>" > "./secrets/REDIS_PASSWORD"
 echo -n "<your secret here>" > "./secrets/SECRET_KEY"
 ```
 
+or
+
+```
+./init.sh
+```
+
 前端代码生成(可选)
 
 ```
@@ -99,23 +105,12 @@ python manage.py createsuperuser
 
 需要自行到[https://www.google.com/recaptcha/](https://www.google.com/recaptcha/)获取客户端密钥和服务端密钥
 
-客户端密钥存放在[frontend/.env](frontend/.env)下
-
-```js
-VUE_APP_BASE_API = '/api/v1'
-VUE_APP_RECAPTCHA_PUBLIC_KEY = '<your RECAPTCHA_CLIENT_KEY>'
-```
-
-并重新生成前端
-```
-yarn build
-```
-
 在服务端设置中添加
 
 ```python
 #backend/CTFm_backend/local_settings.py
 DRF_RECAPTCHA_SECRET_KEY = "<your RECAPTCHA_SERVER_KEY>"
+CLIENT_RECAPTCHA_PUBLIC_KEY = '<your RECAPTCHA_CLIENT_KEY>'
 ```
 
 ### 关于邮件验证功能

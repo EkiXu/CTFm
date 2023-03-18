@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: postgres
+    image: postgres:15.1
     secrets:
       - ctfm_db_password
     environment:
@@ -23,7 +23,6 @@ services:
       - ctfm_redis_password
     environment:
       - REDIS_PASSWORD_FILE=/run/secrets/ctfm_redis_password
-    #command: redis-server --requirepass IpqWSBVEpgQlcTO2qCXXcwF3noGGh5BspKuLZ2XAF5aFTLZs
     command: [
       "bash", "-c",
       '
